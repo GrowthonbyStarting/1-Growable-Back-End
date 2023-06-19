@@ -54,7 +54,8 @@ public class SecurityConfig {
 
         http
                 .authorizeRequests()
-                .antMatchers(FRONT_URL + "/main/**")
+                .antMatchers(FRONT_URL + "/auth/**",FRONT_URL + "/oauth/**", FRONT_URL + "/main/**")
+
                 .authenticated()
                 .anyRequest().permitAll()
 

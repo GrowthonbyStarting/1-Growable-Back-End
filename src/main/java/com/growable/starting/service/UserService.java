@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -27,9 +28,11 @@ import static com.growable.starting.config.SecurityConfig.FRONT_URL;
 
 
 @Service
+@Transactional
 public class UserService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     //환경 변수 가져오기
     @Value("${kakao.clientId}")
@@ -55,10 +58,10 @@ public class UserService {
         // HttpBody 오브젝트 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", client_id);
-        params.add("redirect_uri", FRONT_URL + "/auth");
+        params.add("client_id", "92834c027009e695e46bf5163f5a8643");
+        params.add("redirect_uri", "http://localhost:8080/auth");
         params.add("code", code);
-        params.add("client_secret", client_secret);
+//        params.add("client_secret", "o9Jx2y0106aQu1bCUySOvFVW2duNuEvU");
 
         // HttpHeader 와 HttpBody 정보를 하나의 오브젝트에 담음
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
@@ -71,6 +74,8 @@ public class UserService {
                 kakaoTokenRequest,
                 String.class
         );
+
+        System.out.println(accessTokenResponse);
 
         // JSON 응답을 객체로 변환
         ObjectMapper objectMapper = new ObjectMapper();
@@ -133,7 +138,7 @@ public class UserService {
                     .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
                     .kakaoNickname(profile.getKakao_account().getProfile().getNickname())
                     .kakaoEmail(profile.getKakao_account().getEmail())
-                    .userRole("ROLE_MENTEE").build();
+                    .userRole("ROLE_USER").build();
 
             userRepository.save(user);
         }
