@@ -7,19 +7,17 @@ import com.growable.starting.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-public class MainController {
+public class AuthController {
 
     private final UserService userService;
 
     @Autowired
-    public MainController(UserService userService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
     }
 
@@ -34,14 +32,11 @@ public class MainController {
         if (oauthToken == null) {
             throw new RuntimeException("Failed to obtain access token");
         }
-
         // 발급 받은 accessToken 으로 카카오 회원 정보 DB 저장
         String jwtToken = userService.SaveUserAndGetToken(oauthToken.getAccess_token());
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
-
-
 
         return ResponseEntity.ok().headers(headers).body("success");
     }
