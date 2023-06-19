@@ -24,12 +24,10 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
-import static com.growable.starting.config.SecurityConfig.FRONT_URL;
-
 
 @Service
 @Transactional
-public class UserService {
+public class AuthService {
 
     @Autowired
     UserRepository userRepository;
@@ -42,7 +40,7 @@ public class UserService {
     String client_secret;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -138,7 +136,7 @@ public class UserService {
                     .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
                     .kakaoNickname(profile.getKakao_account().getProfile().getNickname())
                     .kakaoEmail(profile.getKakao_account().getEmail())
-                    .userRole("ROLE_USER").build();
+                    .userRole("ROLE_MENTEE").build();
 
             userRepository.save(user);
         }
@@ -156,4 +154,5 @@ public class UserService {
                 .withClaim("nickname", user.getKakaoNickname())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
     }
+
 }
