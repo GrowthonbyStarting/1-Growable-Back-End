@@ -3,7 +3,7 @@ package com.growable.starting.controller;
 import com.growable.starting.dto.OauthToken;
 import com.growable.starting.jwt.JwtProperties;
 import com.growable.starting.model.User;
-import com.growable.starting.service.UserService;
+import com.growable.starting.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     // 프론트에서 인가코드 돌려 받는 주소
@@ -27,13 +27,13 @@ public class AuthController {
     public ResponseEntity getLogin(@RequestParam("code") String code) {
 
         // 넘어온 인가 코드를 통해 access_token 발급
-        OauthToken oauthToken = userService.getAccessToken(code);
+        OauthToken oauthToken = authService.getAccessToken(code);
 
         if (oauthToken == null) {
             throw new RuntimeException("Failed to obtain access token");
         }
         // 발급 받은 accessToken 으로 카카오 회원 정보 DB 저장
-        String jwtToken = userService.SaveUserAndGetToken(oauthToken.getAccess_token());
+        String jwtToken = authService.SaveUserAndGetToken(oauthToken.getAccess_token());
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
@@ -45,7 +45,7 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<Object> getCurrentUser(HttpServletRequest request) {
 
-        User user = userService.getUser(request);
+        User user = authService.getUser(request);
 
         return ResponseEntity.ok().body(user);
     }

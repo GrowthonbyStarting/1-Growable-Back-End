@@ -34,9 +34,14 @@ public class User {
     private String userRole;
 
     @Column(name = "create_time")
-
     @CreationTimestamp
     private Timestamp createTime;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Mentor mentor;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Mentee mentee;
 
     @Builder
     public User(Long kakaoId, String kakaoProfileImg, String kakaoNickname,
