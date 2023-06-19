@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/growable?serverTime=Asia/Seoul
+    username: root
+    password: cv93523827!!
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+kakao:
+  clientId: 92834c027009e695e46bf5163f5a8643
+  secret: PtzmYmdLi1BIGXgGa1ElNl7YXYcQKVRY
