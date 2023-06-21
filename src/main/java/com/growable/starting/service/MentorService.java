@@ -12,5 +12,5 @@ public interface MentorService {
     String storeMentorProfileImage(String mentorId,MultipartFile image) throws StorageException; //사진 업로드
     void createMentor(MentorDto mentorDto); //일반 유저 -> 멘토(추가정보 입력)
 
-    List<Mentee> getMenteesForLecture(long lectureId);
+    List<Mentee> getMenteesForLecture(Long lectureId);
 }

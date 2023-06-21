@@ -16,14 +16,10 @@ public class Enrollment {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "lecture_id")
     private Lecture lecture;
 
     @ManyToOne
+    @JoinColumn(name = "mentee_id")
     private Mentee mentee;
-
-    private long lectureId;
-
-    private long menteeId;
-
 }
-
