@@ -4,9 +4,11 @@ import com.growable.starting.model.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
-public class MenteeDto {
+public class MenteeDto implements Serializable {
 
     private Long menteeId;
     private String imageUrl;
@@ -16,7 +18,7 @@ public class MenteeDto {
     private int point;
     private String phoneNumber;
     private String startingUrl;
-    private User user;
     private String profileImageUrl;
-
+    private Long userId;
+    private Long lectureId;
 }

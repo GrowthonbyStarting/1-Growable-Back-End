@@ -45,4 +45,8 @@ public class Mentee {
     @Column
     private String profileImageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id")
+    private Lecture lecture;
+
 }

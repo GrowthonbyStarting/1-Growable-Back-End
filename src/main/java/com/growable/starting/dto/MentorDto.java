@@ -2,10 +2,11 @@ package com.growable.starting.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class MentorDto {
+public class MentorDto implements Serializable {
 
     private Long mentorId;
     private String name;
@@ -13,10 +14,13 @@ public class MentorDto {
     private Identity identity;
     private int point;
     private String chatUrl;
-    private Long userId;
     private String category;
     private String subcategory;
     private List<String> keywords;
+    private Long userId;
     private List<CompanyDto> companyInfos;
     private List<LectureExperienceDto> lectureExperiences;
+    private String profileImageUrl;
+    private List<LectureDto> lectures;
+
 }

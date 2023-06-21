@@ -59,5 +59,9 @@ public class Mentor {
     @Column
     private String profileImageUrl;
 
+    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Lecture> lectures;
+
+
 
 }
