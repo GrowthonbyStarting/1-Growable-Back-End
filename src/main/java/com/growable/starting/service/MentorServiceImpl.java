@@ -1,12 +1,11 @@
 package com.growable.starting.service;
 
+import com.growable.starting.model.*;
 import com.growable.starting.model.type.Identity;
 import com.growable.starting.dto.MentorDto;
 import com.growable.starting.exception.StorageException;
-import com.growable.starting.model.Company;
-import com.growable.starting.model.LectureExperience;
-import com.growable.starting.model.Mentor;
-import com.growable.starting.model.User;
+import com.growable.starting.repository.EnrollmentRepository;
+import com.growable.starting.repository.MenteeRepository;
 import com.growable.starting.repository.MentorRepository;
 import com.growable.starting.repository.UserRepository;
 import org.apache.commons.io.FilenameUtils;
@@ -28,13 +27,15 @@ import java.util.stream.Collectors;
 public class MentorServiceImpl implements MentorService{
     private final Path mentorProfileImageDir = Paths.get("uploads/profile-images/mentor");
     private final UserRepository userRepository;
-
     private final MentorRepository mentorRepository;
-
+    private final MenteeRepository menteeRepository;
+    private final EnrollmentRepository enrollmentRepository;
     @Autowired
-    public MentorServiceImpl(UserRepository userRepository, MentorRepository mentorRepository) {
+    public MentorServiceImpl(UserRepository userRepository, MentorRepository mentorRepository, MenteeRepository menteeRepository, EnrollmentRepository enrollmentRepository) {
         this.userRepository = userRepository;
         this.mentorRepository = mentorRepository;
+        this.menteeRepository = menteeRepository;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     @Override
@@ -115,5 +116,10 @@ public class MentorServiceImpl implements MentorService{
         userRepository.save(user);
     }
 
-
+    @Override
+    @Transactional
+    public List<Mentee> getMenteesForLecture(long lectureId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByLectureId(lectureId);
+        return enrollments.stream().map(enrollment -> menteeRepository.findById(enrollment.getMenteeId())).collect(Collectors.toList());
+    }
 }

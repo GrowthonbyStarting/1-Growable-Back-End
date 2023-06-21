@@ -4,7 +4,6 @@ import com.growable.starting.model.Mentee;
 import com.growable.starting.model.User;
 import com.growable.starting.repository.UserRepository;
 import com.growable.starting.service.MenteeServiceImpl;
-import com.growable.starting.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

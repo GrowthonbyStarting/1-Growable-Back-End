@@ -11,6 +11,7 @@ import com.growable.starting.repository.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class LectureServiceImpl implements LectureService {
 
 
     @Override
+    @Transactional
     public Lecture createLecture(Long mentorId, LectureDto lectureDto) {
         Mentor mentor = mentorRepository.findById(mentorId)
                 .orElseThrow(() -> new IllegalArgumentException("Mentor not found with ID: " + mentorId));
@@ -94,6 +96,7 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
+    @Transactional
     public void enrollInLecture(Long menteeId, Long lectureId) {
         Mentee mentee = menteeRepository.findById(menteeId).orElseThrow(() -> new NotFoundException("Mentee not found"));
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new NotFoundException("Lecture not found"));
@@ -105,6 +108,8 @@ public class LectureServiceImpl implements LectureService {
         enrollmentRepository.save(enrollment);
     }
 
+    @Override
+    @Transactional
     public void cancelLectureEnrollment(Long menteeId, Long lectureId) {
         Mentee mentee = menteeRepository.findById(menteeId).orElseThrow(() -> new NotFoundException("Mentee not found"));
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new NotFoundException("Lecture not found"));

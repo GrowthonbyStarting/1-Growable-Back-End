@@ -21,5 +21,9 @@ public class Enrollment {
     @ManyToOne
     private Mentee mentee;
 
+    private long lectureId;
+
+    private long menteeId;
+
 }
 
