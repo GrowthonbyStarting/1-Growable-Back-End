@@ -114,7 +114,7 @@ public class LectureServiceImpl implements LectureService {
         String emailAddress = mentee.getEmail();
         String subject = mentee.getName()+"님 " + lecture.getTitle() + "의 신청이 완료되었습니다.";
         String text = lecture.getLectureStartDate().getMonth() + "월 " +
-                lecture.getLectureStartDate().getDayOfMonth() + "일에" +
+                lecture.getLectureStartDate().getDayOfMonth() + "일에 " +
                 lecture.getTeamUrl() + " 로 접속해주세요.";
 
         emailService.sendEnrollmentConfirmationEmail(emailAddress, subject, text);
