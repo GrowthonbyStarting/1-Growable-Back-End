@@ -2,9 +2,11 @@ package com.growable.starting.service;
 
 import com.growable.starting.dto.LectureDto;
 import com.growable.starting.dto.LectureStatus;
-import com.growable.starting.model.Lecture;
-import com.growable.starting.model.Mentor;
+import com.growable.starting.exception.NotFoundException;
+import com.growable.starting.model.*;
+import com.growable.starting.repository.EnrollmentRepository;
 import com.growable.starting.repository.LectureRepository;
+import com.growable.starting.repository.MenteeRepository;
 import com.growable.starting.repository.MentorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,13 +23,17 @@ public class LectureServiceImpl implements LectureService {
 
     private final LectureRepository lectureRepository;
     private final MentorRepository mentorRepository;
+    private final MenteeRepository menteeRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     @Autowired
-    public LectureServiceImpl(LectureRepository lectureRepository, MentorRepository mentorRepository) {
+    public LectureServiceImpl(LectureRepository lectureRepository, MentorRepository mentorRepository, MenteeRepository menteeRepository, EnrollmentRepository enrollmentRepository) {
         this.lectureRepository = lectureRepository;
         this.mentorRepository = mentorRepository;
+        this.menteeRepository = menteeRepository;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
 
@@ -85,6 +91,28 @@ public class LectureServiceImpl implements LectureService {
             // 상태가 변경된 강의를 저장합니다.
             lectureRepository.save(lecture);
         }
+    }
+
+    @Override
+    public void enrollInLecture(Long menteeId, Long lectureId) {
+        Mentee mentee = menteeRepository.findById(menteeId).orElseThrow(() -> new NotFoundException("Mentee not found"));
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new NotFoundException("Lecture not found"));
+
+        Enrollment enrollment = new Enrollment();
+        enrollment.setMentee(mentee);
+        enrollment.setLecture(lecture);
+
+        enrollmentRepository.save(enrollment);
+    }
+
+    public void cancelLectureEnrollment(Long menteeId, Long lectureId) {
+        Mentee mentee = menteeRepository.findById(menteeId).orElseThrow(() -> new NotFoundException("Mentee not found"));
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new NotFoundException("Lecture not found"));
+
+        Enrollment enrollment = enrollmentRepository.findByMenteeAndLecture(mentee, lecture).orElseThrow(() ->
+                new NotFoundException("Enrollment not found"));
+
+        enrollmentRepository.delete(enrollment);
     }
 }
 

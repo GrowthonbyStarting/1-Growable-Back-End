@@ -143,7 +143,7 @@ public class AuthService {
                     .kakaoProfileImg(profile.getKakao_account().getProfile().getProfile_image_url())
                     .kakaoNickname(profile.getKakao_account().getProfile().getNickname())
                     .kakaoEmail(profile.getKakao_account().getEmail())
-                    .userRole("ROLE_MENTEE").build();
+                    .userRole("ROLE_USER").build();
 
             userRepository.save(user);
         }

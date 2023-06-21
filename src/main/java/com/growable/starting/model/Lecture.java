@@ -51,4 +51,7 @@ public class Lecture {
         mentee.setLecture(this);
     }
 
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments;
+
 }

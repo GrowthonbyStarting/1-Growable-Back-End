@@ -6,4 +6,6 @@ import com.growable.starting.model.Lecture;
 public interface LectureService {
 
     Lecture createLecture(Long mentorId, LectureDto lectureDto);
+
+    void enrollInLecture(Long menteeId, Long lectureId);
 }

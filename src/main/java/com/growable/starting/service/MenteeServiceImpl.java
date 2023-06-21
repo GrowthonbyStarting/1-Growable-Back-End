@@ -38,6 +38,10 @@ public class MenteeServiceImpl implements MenteeService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. id: " + userId));
 
+        if (user.getMentee() != null) {
+            throw new IllegalStateException("이미 멘티로 등록된 사용자입니다.");
+        }
+
         Mentee mentee = new Mentee();
         mentee.setName(user.getKakaoNickname());
         mentee.setEmail(user.getKakaoEmail());
@@ -49,6 +53,7 @@ public class MenteeServiceImpl implements MenteeService {
         user.setMentee(mentee);
         userRepository.save(user);
     }
+
     @Override
     @Transactional
     public String storeMenteeProfileImage(String menteeId, MultipartFile image) throws StorageException {
@@ -60,19 +65,19 @@ public class MenteeServiceImpl implements MenteeService {
             Path menteeProfileImageDir = Paths.get("menteeProfileImages");
             Files.createDirectories(menteeProfileImageDir);
 
-            Path menteeImageDir = menteeProfileImageDir.resolve(menteeId);
+            Path menteeImageDir = menteeProfileImageDir.resolve(menteeId.toString());
             Files.createDirectories(menteeImageDir);
-
 
             String uniqueImageName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename());
             Path destination = menteeImageDir.resolve(uniqueImageName);
             Files.copy(image.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
             Mentee mentee = menteeRepository.findById(Long.valueOf(menteeId)).orElseThrow(() -> new IllegalStateException("Cannot find mentor with id " + menteeId));
-            mentee.setProfileImageUrl(destination.toString());
+            String imageUrl = "/menteeProfileImages/" + menteeId + "/" + uniqueImageName;
+            mentee.setProfileImageUrl(imageUrl);
             menteeRepository.save(mentee);
 
-            return destination.toString(); // 이미지의 경로를 반환합니다.
+            return imageUrl; // 이미지의 웹 경로를 반환합니다.
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
