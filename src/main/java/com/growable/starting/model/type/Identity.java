@@ -1,4 +1,4 @@
-package com.growable.starting.dto;
+package com.growable.starting.model.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

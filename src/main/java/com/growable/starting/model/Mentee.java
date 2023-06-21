@@ -1,6 +1,6 @@
 package com.growable.starting.model;
 
-import com.growable.starting.dto.Identity;
+import com.growable.starting.model.type.Identity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

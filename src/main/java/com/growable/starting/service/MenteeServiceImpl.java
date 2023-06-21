@@ -1,6 +1,6 @@
 package com.growable.starting.service;
 
-import com.growable.starting.dto.Identity;
+import com.growable.starting.model.type.Identity;
 import com.growable.starting.exception.StorageException;
 import com.growable.starting.model.Mentee;
 import com.growable.starting.model.User;

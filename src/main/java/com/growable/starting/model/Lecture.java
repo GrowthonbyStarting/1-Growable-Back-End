@@ -1,6 +1,6 @@
 package com.growable.starting.model;
 
-import com.growable.starting.dto.LectureStatus;
+import com.growable.starting.model.type.LectureStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

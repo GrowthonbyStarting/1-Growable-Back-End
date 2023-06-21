@@ -1,7 +1,7 @@
 package com.growable.starting.service;
 
 import com.growable.starting.dto.LectureDto;
-import com.growable.starting.dto.LectureStatus;
+import com.growable.starting.model.type.LectureStatus;
 import com.growable.starting.exception.NotFoundException;
 import com.growable.starting.model.*;
 import com.growable.starting.repository.EnrollmentRepository;

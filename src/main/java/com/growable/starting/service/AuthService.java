@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.growable.starting.dto.KakaoProfile;
-import com.growable.starting.dto.OauthToken;
+import com.growable.starting.dto.auth.KakaoProfile;
+import com.growable.starting.dto.auth.OauthToken;
 import com.growable.starting.jwt.JwtProperties;
 import com.growable.starting.model.User;
 import com.growable.starting.repository.UserRepository;
@@ -23,8 +23,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-
-import static com.growable.starting.config.SecurityConfig.FRONT_URL;
 
 
 @Service

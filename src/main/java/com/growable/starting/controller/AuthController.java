@@ -1,6 +1,6 @@
 package com.growable.starting.controller;
 
-import com.growable.starting.dto.OauthToken;
+import com.growable.starting.dto.auth.OauthToken;
 import com.growable.starting.jwt.JwtProperties;
 import com.growable.starting.model.User;
 import com.growable.starting.service.AuthService;

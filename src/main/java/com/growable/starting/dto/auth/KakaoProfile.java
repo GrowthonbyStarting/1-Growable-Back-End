@@ -1,4 +1,4 @@
-package com.growable.starting.dto;
+package com.growable.starting.dto.auth;
 
 import lombok.Data;
 
