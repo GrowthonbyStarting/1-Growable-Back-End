@@ -35,9 +35,29 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.6.3'
+    // JUnit 5 (Jupiter) 추가
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    // Mockito 추가
+    testImplementation 'org.mockito:mockito-core:4.2.0'
+    implementation 'org.apache.commons:commons-imaging:1.0-alpha2'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+task myJar(type: Jar){
+    archiveFileName.set('startingProject.jar')
+    from sourceSets.main.output
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.growable.starting.StartingApplication'
+    }
 }

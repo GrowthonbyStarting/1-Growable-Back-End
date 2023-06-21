@@ -26,7 +26,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
 
-    public static final String FRONT_URL = "http://localhost:3000";
+    public static final String FRONT_URL = "http://ec2-13-209-18-185.ap-northeast-2.compute.amazonaws.com:3000";
     private final CorsFilter corsFilter;
 
     @Autowired
@@ -50,8 +50,8 @@ public class SecurityConfig {
                 .and()
                 .httpBasic().disable()
                 .formLogin().disable()
-                .addFilter(corsFilter); // @CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
-
+                .addFilter(corsFilter) // @CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
+                .oauth2Login().defaultSuccessUrl("/main");
         http
                 .authorizeRequests()
                 .antMatchers(FRONT_URL + "/auth/**",FRONT_URL + "/oauth/**", FRONT_URL + "/main/**")
@@ -62,6 +62,8 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+
+
 
         http
                 .addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);

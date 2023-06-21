@@ -18,6 +18,9 @@ public class Mentee {
     private Long menteeId;
 
     @Column
+    private String imageUrl;
+
+    @Column
     private String name;
 
     @Column
@@ -30,10 +33,16 @@ public class Mentee {
     private int Point;
 
     @Column
+    private String phoneNumber;
+
+    @Column
     private String StartingUrl;
 
     @OneToOne
     @JoinColumn(name = "user_code")
     private User user;
+
+    @Column
+    private String profileImageUrl;
 
 }

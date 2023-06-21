@@ -24,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
+import static com.growable.starting.config.SecurityConfig.FRONT_URL;
+
 
 @Service
 @Transactional
@@ -56,8 +58,8 @@ public class AuthService {
         // HttpBody 오브젝트 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "92834c027009e695e46bf5163f5a8643");
-        params.add("redirect_uri", "http://localhost:8080/auth");
+        params.add("client_id", client_id);
+        params.add("redirect_uri", "http://ec2-13-209-18-185.ap-northeast-2.compute.amazonaws.com:8080/api/auth");
         params.add("code", code);
 //        params.add("client_secret", "o9Jx2y0106aQu1bCUySOvFVW2duNuEvU");
 
@@ -72,6 +74,11 @@ public class AuthService {
                 kakaoTokenRequest,
                 String.class
         );
+        System.out.println("Response from Kakao: " + accessTokenResponse);
+
+        if (accessTokenResponse.getStatusCodeValue() != 200) {
+            throw new RuntimeException("Error while obtaining access token: " + accessTokenResponse.getBody());
+        }
 
         System.out.println(accessTokenResponse);
 
