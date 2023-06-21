@@ -46,6 +46,9 @@ public class Lecture {
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Mentee> mentees;
 
+    @Column
+    private String teamUrl;
+
     public void addMentee(Mentee mentee) {
         this.mentees.add(mentee);
         mentee.setLecture(this);

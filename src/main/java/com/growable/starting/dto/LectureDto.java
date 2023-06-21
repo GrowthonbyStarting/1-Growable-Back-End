@@ -15,5 +15,6 @@ public class LectureDto {
     private String lectureEndDate;
     private LectureStatus status;
     private String mentorName;
+    private String teamUrl;
 
 }

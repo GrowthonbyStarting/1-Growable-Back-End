@@ -26,15 +26,17 @@ public class LectureServiceImpl implements LectureService {
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final EmailService emailService;
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     @Autowired
-    public LectureServiceImpl(LectureRepository lectureRepository, MentorRepository mentorRepository, MenteeRepository menteeRepository, EnrollmentRepository enrollmentRepository) {
+    public LectureServiceImpl(LectureRepository lectureRepository, MentorRepository mentorRepository, MenteeRepository menteeRepository, EnrollmentRepository enrollmentRepository, EmailService emailService) {
         this.lectureRepository = lectureRepository;
         this.mentorRepository = mentorRepository;
         this.menteeRepository = menteeRepository;
         this.enrollmentRepository = enrollmentRepository;
+        this.emailService = emailService;
     }
 
 
@@ -55,6 +57,7 @@ public class LectureServiceImpl implements LectureService {
         lecture.setMentorName(lecture.getMentor().getName());
         lecture.setStatus(LectureStatus.NOT_STARTED);
         lecture.setMentor(mentor);
+        lecture.setTeamUrl(lectureDto.getTeamUrl());
 
         return lectureRepository.save(lecture);
     }
@@ -106,7 +109,18 @@ public class LectureServiceImpl implements LectureService {
         enrollment.setLecture(lecture);
 
         enrollmentRepository.save(enrollment);
+
+        // 이메일 보내기
+        String emailAddress = mentee.getEmail();
+        String subject = mentee.getName()+"님 " + lecture.getTitle() + "의 신청이 완료되었습니다.";
+        String text = lecture.getLectureStartDate().getMonth() + "월 " +
+                lecture.getLectureStartDate().getDayOfMonth() + "일에" +
+                lecture.getTeamUrl() + " 로 접속해주세요.";
+
+        emailService.sendEnrollmentConfirmationEmail(emailAddress, subject, text);
     }
+
+
 
     @Override
     @Transactional
