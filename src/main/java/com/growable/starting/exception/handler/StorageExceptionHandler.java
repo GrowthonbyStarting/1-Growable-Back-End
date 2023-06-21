@@ -1,5 +1,6 @@
-package com.growable.starting.exception;
+package com.growable.starting.exception.handler;
 
+import com.growable.starting.exception.StorageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
