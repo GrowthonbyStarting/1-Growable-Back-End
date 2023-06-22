@@ -14,7 +14,7 @@ import java.util.List;
 public class Mentee {
 
     @Id
-    @Column
+    @Column(name = "mentee_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menteeId;
 

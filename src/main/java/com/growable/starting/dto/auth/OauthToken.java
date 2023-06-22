@@ -11,5 +11,6 @@ public class OauthToken {
     private String scope;
     private int refresh_token_expires_in;
     private String id_token;
+    private String redirect_uri;
 
 }

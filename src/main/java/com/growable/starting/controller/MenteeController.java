@@ -22,7 +22,6 @@ public class MenteeController {
         this.menteeService = menteeService;
         this.lectureService = lectureService;
     }
-
     @PostMapping("/{lectureId}/enroll/{menteeId}")
     public ResponseEntity<?> enrollInLecture(@PathVariable Long lectureId, @PathVariable Long menteeId) {
         try {

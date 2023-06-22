@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class LectureExperience {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
     @Column
     private String lectureTitle;

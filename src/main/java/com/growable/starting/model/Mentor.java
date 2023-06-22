@@ -14,8 +14,8 @@ import java.util.List;
 public class Mentor {
 
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mentor_id")
     private Long mentorId;
 
     @Column
@@ -61,7 +61,6 @@ public class Mentor {
 
     @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lecture> lectures;
-
 
 
 }
