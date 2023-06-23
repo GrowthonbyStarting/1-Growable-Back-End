@@ -25,7 +25,6 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
     public static final String FRONT_URL = "http://ec2-13-209-18-185.ap-northeast-2.compute.amazonaws.com:3000";
     private final CorsFilter corsFilter;
 
@@ -54,21 +53,17 @@ public class SecurityConfig {
                 .oauth2Login().defaultSuccessUrl("/main");
         http
                 .authorizeRequests()
-                .antMatchers(FRONT_URL + "/auth/**",FRONT_URL + "/oauth/**", FRONT_URL + "/main/**")
-
-                .authenticated()
-                .anyRequest().permitAll()
+                .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**", FRONT_URL + "/auth/**",FRONT_URL + "/oauth/**", FRONT_URL + "/main/**")
+                .permitAll()
+                .anyRequest().authenticated()
 
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint());
-
-
 
         http
                 .addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 }

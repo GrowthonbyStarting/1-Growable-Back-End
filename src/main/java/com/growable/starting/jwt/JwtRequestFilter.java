@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Component
@@ -27,6 +28,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String servletPath = request.getServletPath();
+        if (isSwaggerPath(servletPath)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
         System.out.println("JwtRequestFilter 진입");
 
@@ -56,5 +62,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         request.setAttribute("userCode", userCode);
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isSwaggerPath(String path) {
+        String[] swaggerPaths = {
+                "/swagger-ui/**",
+                "/swagger-resources/**",
+                "/v3/api-docs/**",
+                "/v2/api-docs/**",
+                "/webjars/**"
+        };
+
+        return Arrays.stream(swaggerPaths).anyMatch(path::startsWith);
     }
 }
