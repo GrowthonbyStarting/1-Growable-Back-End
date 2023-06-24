@@ -1,11 +1,10 @@
 package com.growable.starting.service;
 
-import com.growable.starting.model.*;
-import com.growable.starting.model.type.Identity;
 import com.growable.starting.dto.MentorDto;
 import com.growable.starting.exception.StorageException;
+import com.growable.starting.model.*;
+import com.growable.starting.model.type.Identity;
 import com.growable.starting.repository.EnrollmentRepository;
-import com.growable.starting.repository.MenteeRepository;
 import com.growable.starting.repository.MentorRepository;
 import com.growable.starting.repository.UserRepository;
 import org.apache.commons.io.FilenameUtils;
@@ -28,19 +27,17 @@ public class MentorServiceImpl implements MentorService{
     private final Path mentorProfileImageDir = Paths.get("uploads/profile-images/mentor");
     private final UserRepository userRepository;
     private final MentorRepository mentorRepository;
-    private final MenteeRepository menteeRepository;
     private final EnrollmentRepository enrollmentRepository;
     @Autowired
-    public MentorServiceImpl(UserRepository userRepository, MentorRepository mentorRepository, MenteeRepository menteeRepository, EnrollmentRepository enrollmentRepository) {
+    public MentorServiceImpl(UserRepository userRepository, MentorRepository mentorRepository, EnrollmentRepository enrollmentRepository) {
         this.userRepository = userRepository;
         this.mentorRepository = mentorRepository;
-        this.menteeRepository = menteeRepository;
         this.enrollmentRepository = enrollmentRepository;
     }
 
     @Override
     @Transactional
-    public String storeMentorProfileImage(String mentorId, MultipartFile image) throws StorageException {
+    public Mentor storeMentorProfileImage(String mentorId, MultipartFile image) throws StorageException {
         if (image.isEmpty()) {
             throw new StorageException("Failed to store empty file.");
         }
@@ -55,7 +52,7 @@ public class MentorServiceImpl implements MentorService{
             Files.createDirectories(mentorImageDir);
 
             // 이미지 파일 이름 생성
-            String uniqueImageName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename());
+            String uniqueImageName = UUID.randomUUID() + "." + FilenameUtils.getExtension(image.getOriginalFilename());
 
             // 이미지를 지정된 경로로 복사
             Path destination = mentorImageDir.resolve(uniqueImageName);
@@ -65,29 +62,29 @@ public class MentorServiceImpl implements MentorService{
             mentor.setProfileImageUrl(destination.toString());
             mentorRepository.save(mentor);
 
-            return destination.toString(); // 이미지의 경로를 반환합니다.
+            return mentor;
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
     }
 
+
     @Transactional
     @Override
-    public void createMentor(MentorDto mentorDto) {
-        User user = userRepository.findById(mentorDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. id: " + mentorDto.getUserId()));
+    public Mentor createMentor(MentorDto mentorDto) {
+        User user = userRepository.findById(mentorDto.getUser().getUserCode())
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. id: " + mentorDto.getUser().getUserCode()));
 
         Mentor mentor = new Mentor();
         mentor.setName(user.getKakaoNickname());
         mentor.setEmail(user.getKakaoEmail());
         mentor.setIdentity(Identity.MENTOR);
-        mentor.setPoint(mentorDto.getPoint());
         mentor.setChatUrl(mentorDto.getChatUrl());
         mentor.setCategory(mentorDto.getCategory());
         mentor.setSubcategory(mentorDto.getSubcategory());
         mentor.setKeywords(mentorDto.getKeywords());
 
-        List<Company> companyInfos = mentorDto.getCompanyInfos().stream()
+        List<Company> companyInfos = mentorDto.getCompany().stream()
                 .map(infoDto -> {
                     Company info = new Company();
                     info.setCompanyName(infoDto.getCompanyName());
@@ -114,12 +111,12 @@ public class MentorServiceImpl implements MentorService{
 
         user.setMentor(mentor);
         userRepository.save(user);
+        return mentor;
     }
 
-    @Override
     @Transactional
-    public List<Mentee> getMenteesForLecture(Long lectureId) {
-        List<Enrollment> enrollments = enrollmentRepository.findByLectureId(lectureId);
+    public List<Mentee> getMenteesForLecture(Long lectureId, Long mentorId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByLectureIdAndMentorId(lectureId, mentorId);
         return enrollments.stream().map(Enrollment::getMentee).collect(Collectors.toList());
     }
 }

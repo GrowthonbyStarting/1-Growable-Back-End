@@ -1,18 +1,16 @@
 package com.growable.starting.dto;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
-public class ReviewDto {
+public class EnrollmentDto {
     private Long id;
     private Long lectureId;
     private Long menteeId;
-    private String content;
-    private Boolean like;
     private Long mentorId;
+
 }

@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
@@ -48,12 +47,12 @@ public class LectureServiceImpl implements LectureService {
 
         Lecture lecture = new Lecture();
         lecture.setTitle(lectureDto.getTitle());
-        lecture.setRecruitmentStartDate(LocalDate.parse(lectureDto.getRecruitmentStartDate(), formatter));
-        lecture.setRecruitmentEndDate(LocalDate.parse(lectureDto.getRecruitmentEndDate(), formatter));
+        lecture.setRecruitmentStartDate(lectureDto.getRecruitmentStartDate());
+        lecture.setRecruitmentEndDate(lectureDto.getRecruitmentEndDate());
         lecture.setCapacity(lectureDto.getCapacity());
         lecture.setFee(lectureDto.getFee());
-        lecture.setLectureStartDate(LocalDate.parse(lectureDto.getLectureStartDate(), formatter));
-        lecture.setLectureEndDate(LocalDate.parse(lectureDto.getLectureEndDate(), formatter));
+        lecture.setLectureStartDate(lectureDto.getLectureStartDate());
+        lecture.setLectureEndDate(lectureDto.getLectureEndDate());
         lecture.setMentorName(lecture.getMentor().getName());
         lecture.setStatus(LectureStatus.NOT_STARTED);
         lecture.setMentor(mentor);
@@ -124,7 +123,7 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     @Transactional
-    public void cancelLectureEnrollment(Long menteeId, Long lectureId) {
+    public Enrollment cancelLectureEnrollment(Long menteeId, Long lectureId) {
         Mentee mentee = menteeRepository.findById(menteeId).orElseThrow(() -> new NotFoundException("Mentee not found"));
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new NotFoundException("Lecture not found"));
 
@@ -132,6 +131,7 @@ public class LectureServiceImpl implements LectureService {
                 new NotFoundException("Enrollment not found"));
 
         enrollmentRepository.delete(enrollment);
+        return enrollment;
     }
 }
 

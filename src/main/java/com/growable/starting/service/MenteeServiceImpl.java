@@ -1,5 +1,6 @@
 package com.growable.starting.service;
 
+import com.growable.starting.dto.MenteeDto;
 import com.growable.starting.model.type.Identity;
 import com.growable.starting.exception.StorageException;
 import com.growable.starting.model.Mentee;
@@ -34,7 +35,7 @@ public class MenteeServiceImpl implements MenteeService {
 
     @Override
     @Transactional
-    public void becomeMentee(Long userId, Mentee menteeDetails) {
+    public Mentee becomeMentee(Long userId, MenteeDto menteeDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. id: " + userId));
 
@@ -46,17 +47,18 @@ public class MenteeServiceImpl implements MenteeService {
         mentee.setName(user.getKakaoNickname());
         mentee.setEmail(user.getKakaoEmail());
         mentee.setIdentity(Identity.MENTEE);
-        mentee.setStartingUrl(menteeDetails.getStartingUrl());
+        mentee.setStartingUrl(menteeDto.getStartingUrl());
         mentee.setImageUrl(user.getKakaoProfileImg());
         mentee.setUser(user);
 
         user.setMentee(mentee);
         userRepository.save(user);
+        return mentee;
     }
 
     @Override
     @Transactional
-    public String storeMenteeProfileImage(String menteeId, MultipartFile image) throws StorageException {
+    public Mentee storeMenteeProfileImage(String menteeId, MultipartFile image) throws StorageException {
         if (image.isEmpty()) {
             throw new StorageException("Failed to store empty file.");
         }
@@ -77,7 +79,7 @@ public class MenteeServiceImpl implements MenteeService {
             mentee.setProfileImageUrl(imageUrl);
             menteeRepository.save(mentee);
 
-            return imageUrl; // 이미지의 웹 경로를 반환합니다.
+            return mentee;
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }

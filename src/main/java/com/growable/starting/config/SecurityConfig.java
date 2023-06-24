@@ -28,7 +28,6 @@ public class SecurityConfig {
     public static final String FRONT_URL = "http://ec2-13-209-18-185.ap-northeast-2.compute.amazonaws.com:3000";
     private final CorsFilter corsFilter;
 
-    @Autowired
     public SecurityConfig(CorsFilter corsFilter) {
         this.corsFilter = corsFilter;
     }
@@ -53,7 +52,8 @@ public class SecurityConfig {
                 .oauth2Login().defaultSuccessUrl("/main");
         http
                 .authorizeRequests()
-                .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**", FRONT_URL + "/auth/**",FRONT_URL + "/oauth/**", FRONT_URL + "/main/**")
+                .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**", FRONT_URL + "/auth/**",FRONT_URL + "/oauth/**", FRONT_URL + "/main/**"
+                ,"/api/**")
                 .permitAll()
                 .anyRequest().authenticated()
 

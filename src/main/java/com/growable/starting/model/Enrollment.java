@@ -23,4 +23,8 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "mentee_id")
     private Mentee mentee;
+
+    @ManyToOne
+    @JoinColumn(name = "mentor_id")
+    private Mentor mentor;
 }

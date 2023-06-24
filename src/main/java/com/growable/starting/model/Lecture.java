@@ -1,6 +1,8 @@
 package com.growable.starting.model;
 
 import com.growable.starting.model.type.LectureStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "lecture")
 public class Lecture {
@@ -49,11 +53,6 @@ public class Lecture {
 
     @Column
     private String teamUrl;
-
-    public void addMentee(Mentee mentee) {
-        this.mentees.add(mentee);
-        mentee.setLecture(this);
-    }
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments;

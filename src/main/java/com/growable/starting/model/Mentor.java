@@ -62,5 +62,8 @@ public class Mentor {
     @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lecture> lectures;
 
+    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments;
+
 
 }
