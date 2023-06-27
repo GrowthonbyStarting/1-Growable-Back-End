@@ -1,8 +1,6 @@
 package com.growable.starting.dto;
 
 import com.growable.starting.model.Company;
-import lombok.Data;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

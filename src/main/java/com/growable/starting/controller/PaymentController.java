@@ -28,13 +28,12 @@ public class PaymentController {
 
     private final PaymentRepository paymentRepository;
     private final MenteeRepository menteeRepository;
+    private final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     @Value("${import.imp_key}")
     private String keyPg;
-
     @Value("${import.imp_secret}")
     private String secretPg;
-    private final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     @Autowired
     public PaymentController(PaymentRepository paymentRepository, MenteeRepository menteeRepository) {
@@ -42,7 +41,7 @@ public class PaymentController {
         this.menteeRepository = menteeRepository;
     }
 
-    public void setPayment(String merchantUid, int amount, String buyerEmail){
+    public void setPayment(String merchantUid, int amount, String buyerEmail) {
         Payment payment = new Payment();
         payment.setBuyerEmail(buyerEmail);
         payment.setMerchant_uid(merchantUid);
@@ -56,11 +55,11 @@ public class PaymentController {
             logger.info("Payment Request: {}", paymentRequest);
             String buyerEmail = paymentRequest.getBuyerEmail();
             String accessToken = getAccessToken();
-            String merchantUid =paymentRequest.getMerchant_uid();
+            String merchantUid = paymentRequest.getMerchant_uid();
             int amount = paymentRequest.getAmount();
             String impUid = paymentRequest.getImp_uid();
             int resAmount = (int) getPaymentData(impUid, accessToken);
-            if(amount == resAmount) {
+            if (amount == resAmount) {
                 setPayment(merchantUid, amount, buyerEmail);
                 Optional<Mentee> optionalMentee = menteeRepository.findByEmail(buyerEmail);
                 if (optionalMentee.isPresent()) {
@@ -109,7 +108,7 @@ public class PaymentController {
         }
     }
 
-    public ResponseEntity<String> callIamportApi(String url, HttpMethod method, String accessToken) {
+    public ResponseEntity<String> callPortOneServer(String url, HttpMethod method, String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", accessToken);
 
@@ -123,7 +122,7 @@ public class PaymentController {
         final String url = "https://api.iamport.kr/payments/" + impUid;
         HttpMethod method = HttpMethod.GET;
 
-        ResponseEntity<String> responseEntity = callIamportApi(url, method, accessToken);
+        ResponseEntity<String> responseEntity = callPortOneServer(url, method, accessToken);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             ObjectMapper objMapper = new ObjectMapper();

@@ -2,9 +2,12 @@ package com.growable.starting.service;
 
 import com.growable.starting.dto.LectureDto;
 import com.growable.starting.exception.InsufficientFundsException;
-import com.growable.starting.model.type.LectureStatus;
 import com.growable.starting.exception.NotFoundException;
-import com.growable.starting.model.*;
+import com.growable.starting.model.Enrollment;
+import com.growable.starting.model.Lecture;
+import com.growable.starting.model.Mentee;
+import com.growable.starting.model.Mentor;
+import com.growable.starting.model.type.LectureStatus;
 import com.growable.starting.repository.EnrollmentRepository;
 import com.growable.starting.repository.LectureRepository;
 import com.growable.starting.repository.MenteeRepository;
@@ -104,18 +107,18 @@ public class LectureServiceImpl implements LectureService {
         Mentee mentee = menteeRepository.findById(menteeId).orElseThrow(() -> new NotFoundException("Mentee not found"));
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new NotFoundException("Lecture not found"));
         Mentor mentor = lecture.getMentor();
-        Enrollment enrollment = new Enrollment(mentee,lecture,mentor);
+        Enrollment enrollment = new Enrollment(mentee, lecture, mentor);
         enrollment.setMentee(mentee);
         enrollment.setLecture(lecture);
         enrollment.setMentor(mentor);
         enrollmentRepository.save(enrollment);
         if (mentee.getPoint() < lecture.getFee()) {
             throw new InsufficientFundsException("Insufficient funds for enrolling in lecture");
-        }else {
+        } else {
             mentee.setPoint(mentee.getPoint() - lecture.getFee());
             menteeRepository.save(mentee);
             String emailAddress = mentee.getEmail();
-            String subject = mentee.getName()+"님 " + lecture.getTitle() + "의 신청이 완료되었습니다.";
+            String subject = mentee.getName() + "님 " + lecture.getTitle() + "의 신청이 완료되었습니다.";
             String text = lecture.getLectureStartDate().getMonth() + "월 " +
                     lecture.getLectureStartDate().getDayOfMonth() + "일에 " +
                     lecture.getTeamUrl() + " 로 접속해주세요.";
@@ -124,7 +127,6 @@ public class LectureServiceImpl implements LectureService {
         }
         return enrollment;
     }
-
 
 
     @Override

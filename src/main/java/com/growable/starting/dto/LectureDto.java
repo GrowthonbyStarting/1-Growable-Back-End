@@ -2,13 +2,10 @@ package com.growable.starting.dto;
 
 import com.growable.starting.model.Lecture;
 import com.growable.starting.model.Mentor;
-import com.growable.starting.model.type.LectureStatus;
 import lombok.Builder;
-import lombok.Data;
-
-import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Getter

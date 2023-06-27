@@ -1,7 +1,11 @@
 package com.growable.starting.dto.auth;
 
 import com.growable.starting.model.User;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class AuthResponse {
     private User user;
     private String error;
@@ -11,11 +15,4 @@ public class AuthResponse {
         this.error = error;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public String getError() {
-        return error;
-    }
 }

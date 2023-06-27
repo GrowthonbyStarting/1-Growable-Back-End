@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -55,7 +55,7 @@ public class ReviewController {
     @PostMapping("/reply/{review_Id}/{mentor_Id}")
     public ResponseEntity<Reply> addReply(String content, @PathVariable("review_Id") Long mentorId, @PathVariable("mentor_Id") Long reviewId) {
         Reply replyEntity = reviewService.addReply(reviewId, mentorId, content);
-        return new ResponseEntity<>(replyEntity,HttpStatus.OK);
+        return new ResponseEntity<>(replyEntity, HttpStatus.OK);
     }
 
 

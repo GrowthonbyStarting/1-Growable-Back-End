@@ -57,6 +57,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new RuntimeException("Cannot submit the review: The mentee has not attended the lecture or the lecture is not finished yet.");
         }
     }
+
     @Transactional
     @Override
     public Review createReview(ReviewDto reviewDto) {

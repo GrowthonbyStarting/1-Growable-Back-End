@@ -2,7 +2,6 @@ package com.growable.starting.config;
 
 import com.growable.starting.jwt.JwtAuthenticationEntryPoint;
 import com.growable.starting.jwt.JwtRequestFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -52,7 +51,7 @@ public class SecurityConfig {
                 .oauth2Login();
         http
                 .authorizeRequests()
-                .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**","/api/**", FRONT_URL + "/api/**")
+                .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**", "/api/**", FRONT_URL + "/api/**")
 //                .antMatchers("/**",FRONT_URL+"/**")
                 .permitAll()
                 .anyRequest().authenticated()

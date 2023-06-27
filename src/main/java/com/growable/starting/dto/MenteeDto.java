@@ -1,7 +1,9 @@
 package com.growable.starting.dto;
 
 import com.growable.starting.model.type.Identity;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 

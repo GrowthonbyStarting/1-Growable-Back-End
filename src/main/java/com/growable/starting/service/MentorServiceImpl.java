@@ -23,11 +23,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class MentorServiceImpl implements MentorService{
+public class MentorServiceImpl implements MentorService {
     private final Path mentorProfileImageDir = Paths.get("uploads/profile-images/mentor");
     private final UserRepository userRepository;
     private final MentorRepository mentorRepository;
     private final EnrollmentRepository enrollmentRepository;
+
     @Autowired
     public MentorServiceImpl(UserRepository userRepository, MentorRepository mentorRepository, EnrollmentRepository enrollmentRepository) {
         this.userRepository = userRepository;

@@ -50,6 +50,7 @@ public class MentorController {
         Mentor updatedMentor = mentorService.storeMentorProfileImage(mentorId, image);
         return ResponseEntity.ok(updatedMentor);
     }
+
     @ApiOperation("챌린지 개설")
     @PostMapping("/create/lectures/{mentorId}")
     public ResponseEntity<Lecture> createLecture(@PathVariable Long mentorId, @RequestBody LectureDto lectureDto) {
@@ -60,7 +61,7 @@ public class MentorController {
     @ApiOperation("챌린지를 신청한 멘티 확인")
     @GetMapping("/lectures/{lectureId}/mentees/{mentorId}")
     public ResponseEntity<List<Mentee>> getMenteesForLecture(@PathVariable(name = "lectureId") Long lectureId,
-                                             @PathVariable(name = "mentorId") Long mentorId){
+                                                             @PathVariable(name = "mentorId") Long mentorId) {
         List<Mentee> menteeList = mentorService.getMenteesForLecture(lectureId, mentorId);
         return ResponseEntity.ok(menteeList);
     }

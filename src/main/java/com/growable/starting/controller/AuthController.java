@@ -4,10 +4,8 @@ import com.growable.starting.dto.auth.AuthRequest;
 import com.growable.starting.dto.auth.AuthResponse;
 import com.growable.starting.dto.auth.KakaoProfile;
 import com.growable.starting.dto.auth.OauthToken;
-import com.growable.starting.model.Lecture;
 import com.growable.starting.model.User;
 import com.growable.starting.repository.UserRepository;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -15,28 +13,27 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import java.util.Collections;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 //06.26 카카오 로그인 진입 성공 후 메소드 분리 예정
 @RestController
 @RequestMapping("/api")
 public class AuthController {
     private final UserRepository userRepository;
+    @Value("${kakao.clientId}")
+    String client_id;
 
     @Autowired
     public AuthController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Value("${kakao.clientId}")
-    String client_id;
-
     @GetMapping("/send-key")
-    public ResponseEntity<Map<String, String>> sendKey(){
+    public ResponseEntity<Map<String, String>> sendKey() {
         Map<String, String> res = new HashMap<>();
-        res.put("apikey","92834c027009e695e46bf5163f5a8643");
+        res.put("apikey", "92834c027009e695e46bf5163f5a8643");
         System.out.println(client_id);
         return ResponseEntity.ok(res);
     }
@@ -104,14 +101,6 @@ public class AuthController {
         return responseEntity.getBody();
     }
 
-
-    private boolean isUserAuthenticated(String accessToken) {
-        KakaoProfile kakaoProfile = getKakaoProfile(accessToken);
-        User user = saveKakaoUserInfo(kakaoProfile);
-        return user != null;
-    }
-
-
     private KakaoProfile getKakaoProfile(String accessToken) {
         String profileUrl = "https://kapi.kakao.com/v2/user/me";
         HttpHeaders headers = new HttpHeaders();
@@ -135,9 +124,5 @@ public class AuthController {
         newUser.setUserRole("user");
 
         return userRepository.save(newUser);
-    }
-
-    private ResponseEntity<Map<String, String>> buildErrorResponse(HttpStatus status, String errorMessage) {
-        return ResponseEntity.status(status).body(Collections.singletonMap("error", errorMessage));
     }
 }

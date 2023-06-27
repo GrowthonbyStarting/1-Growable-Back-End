@@ -8,7 +8,6 @@ import com.growable.starting.model.Enrollment;
 import com.growable.starting.model.EnrollmentResponse;
 import com.growable.starting.model.Mentee;
 import com.growable.starting.service.LectureServiceImpl;
-import com.growable.starting.service.MenteeService;
 import com.growable.starting.service.MenteeServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ public class MenteeController {
         this.menteeService = menteeService;
         this.lectureService = lectureService;
     }
+
     @ApiOperation("챌린지 신청")
     @PostMapping("/{lectureId}/enroll/{menteeId}")
     public ResponseEntity<?> enrollInLecture(@PathVariable Long lectureId, @PathVariable Long menteeId) {
@@ -42,9 +42,7 @@ public class MenteeController {
             response.setEnrollment(enrollment);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (InsufficientFundsException e) {
+        } catch (NotFoundException | InsufficientFundsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

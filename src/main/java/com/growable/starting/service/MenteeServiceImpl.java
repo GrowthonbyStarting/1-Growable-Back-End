@@ -1,10 +1,10 @@
 package com.growable.starting.service;
 
 import com.growable.starting.dto.MenteeDto;
-import com.growable.starting.model.type.Identity;
 import com.growable.starting.exception.StorageException;
 import com.growable.starting.model.Mentee;
 import com.growable.starting.model.User;
+import com.growable.starting.model.type.Identity;
 import com.growable.starting.repository.MenteeRepository;
 import com.growable.starting.repository.UserRepository;
 import org.apache.commons.io.FilenameUtils;

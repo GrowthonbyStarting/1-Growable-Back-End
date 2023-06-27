@@ -29,5 +29,5 @@ public class Company {
     private String startDate;
     @Column
     private String endDate; // 허용되는 null 값입니다.
-    
+
 }

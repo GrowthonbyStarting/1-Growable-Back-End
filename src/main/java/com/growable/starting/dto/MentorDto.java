@@ -5,7 +5,6 @@ import com.growable.starting.model.LectureExperience;
 import com.growable.starting.model.User;
 import com.growable.starting.model.type.Identity;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
