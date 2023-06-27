@@ -21,7 +21,7 @@ public class LectureDto {
     private LocalDate recruitmentStartDate;
     private LocalDate recruitmentEndDate;
     private int capacity;
-    private double fee;
+    private int fee;
     private LocalDate lectureStartDate;
     private LocalDate lectureEndDate;
     private String mentorName;

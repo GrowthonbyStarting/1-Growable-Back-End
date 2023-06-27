@@ -1,6 +1,7 @@
 package com.growable.starting.service;
 
 import com.growable.starting.dto.LectureDto;
+import com.growable.starting.exception.InsufficientFundsException;
 import com.growable.starting.model.type.LectureStatus;
 import com.growable.starting.exception.NotFoundException;
 import com.growable.starting.model.*;
@@ -107,18 +108,20 @@ public class LectureServiceImpl implements LectureService {
         enrollment.setMentee(mentee);
         enrollment.setLecture(lecture);
         enrollment.setMentor(mentor);
-
         enrollmentRepository.save(enrollment);
+        if (mentee.getPoint() < lecture.getFee()) {
+            throw new InsufficientFundsException("Insufficient funds for enrolling in lecture");
+        }else {
+            mentee.setPoint(mentee.getPoint() - lecture.getFee());
+            menteeRepository.save(mentee);
+            String emailAddress = mentee.getEmail();
+            String subject = mentee.getName()+"님 " + lecture.getTitle() + "의 신청이 완료되었습니다.";
+            String text = lecture.getLectureStartDate().getMonth() + "월 " +
+                    lecture.getLectureStartDate().getDayOfMonth() + "일에 " +
+                    lecture.getTeamUrl() + " 로 접속해주세요.";
 
-        // 이메일 보내기
-        String emailAddress = mentee.getEmail();
-        String subject = mentee.getName()+"님 " + lecture.getTitle() + "의 신청이 완료되었습니다.";
-        String text = lecture.getLectureStartDate().getMonth() + "월 " +
-                lecture.getLectureStartDate().getDayOfMonth() + "일에 " +
-                lecture.getTeamUrl() + " 로 접속해주세요.";
-
-        emailService.sendEnrollmentConfirmationEmail(emailAddress, subject, text);
-
+            emailService.sendEnrollmentConfirmationEmail(emailAddress, subject, text);
+        }
         return enrollment;
     }
 

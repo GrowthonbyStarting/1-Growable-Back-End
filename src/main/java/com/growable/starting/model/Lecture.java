@@ -32,7 +32,7 @@ public class Lecture {
     @Column
     private int capacity; // 모집정원
     @Column
-    private double fee; // 강의료
+    private int fee; // 강의료
     @Column
     private LocalDate lectureStartDate;
     @Column

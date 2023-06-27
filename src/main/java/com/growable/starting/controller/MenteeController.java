@@ -1,9 +1,11 @@
 package com.growable.starting.controller;
 
 import com.growable.starting.dto.MenteeDto;
+import com.growable.starting.exception.InsufficientFundsException;
 import com.growable.starting.exception.NotFoundException;
 import com.growable.starting.exception.StorageException;
 import com.growable.starting.model.Enrollment;
+import com.growable.starting.model.EnrollmentResponse;
 import com.growable.starting.model.Mentee;
 import com.growable.starting.service.LectureServiceImpl;
 import com.growable.starting.service.MenteeService;
@@ -31,9 +33,18 @@ public class MenteeController {
     @PostMapping("/{lectureId}/enroll/{menteeId}")
     public ResponseEntity<?> enrollInLecture(@PathVariable Long lectureId, @PathVariable Long menteeId) {
         try {
-           Enrollment enrollment = lectureService.enrollInLecture(menteeId, lectureId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(enrollment);
+            Enrollment enrollment = lectureService.enrollInLecture(menteeId, lectureId);
+            int updatedPoints = enrollment.getMentee().getPoint();
+
+            // 응답 객체 생성과 함께 정보 채우기
+            EnrollmentResponse response = new EnrollmentResponse();
+            response.setUpdatedPoints(updatedPoints);
+            response.setEnrollment(enrollment);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (InsufficientFundsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
