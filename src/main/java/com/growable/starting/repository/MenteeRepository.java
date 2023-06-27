@@ -12,4 +12,7 @@ public interface MenteeRepository extends JpaRepository<Mentee, Long> {
     Mentee findById(@Param("menteeId") long menteeId);
 
     Optional<Mentee> findByEmail(String email);
+
+    @Query("SELECT m.menteeId FROM Mentee m WHERE m.email = :email")
+    Long findMenteeIdByEmail(@Param("email") String email);
 }

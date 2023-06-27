@@ -99,13 +99,14 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     @Transactional
-    public void enrollInLecture(Long menteeId, Long lectureId) {
+    public Enrollment enrollInLecture(Long menteeId, Long lectureId) {
         Mentee mentee = menteeRepository.findById(menteeId).orElseThrow(() -> new NotFoundException("Mentee not found"));
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new NotFoundException("Lecture not found"));
-
-        Enrollment enrollment = new Enrollment();
+        Mentor mentor = lecture.getMentor();
+        Enrollment enrollment = new Enrollment(mentee,lecture,mentor);
         enrollment.setMentee(mentee);
         enrollment.setLecture(lecture);
+        enrollment.setMentor(mentor);
 
         enrollmentRepository.save(enrollment);
 
@@ -117,6 +118,8 @@ public class LectureServiceImpl implements LectureService {
                 lecture.getTeamUrl() + " 로 접속해주세요.";
 
         emailService.sendEnrollmentConfirmationEmail(emailAddress, subject, text);
+
+        return enrollment;
     }
 
 

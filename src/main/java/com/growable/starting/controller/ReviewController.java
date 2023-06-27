@@ -1,17 +1,22 @@
 package com.growable.starting.controller;
 
+import com.growable.starting.dto.ReviewDto;
+import com.growable.starting.model.CreateReviewResponse;
+import com.growable.starting.model.Mentor;
+import com.growable.starting.model.Reply;
 import com.growable.starting.model.Review;
 import com.growable.starting.service.ReviewServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import java.security.Principal;
 import java.util.List;
 
 @RestController
+@RequestMapping("/review")
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;
@@ -21,19 +26,22 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @ApiOperation("리뷰 목록")
-    @PostMapping("/reviews")
-    public ResponseEntity<?> createReview(@RequestBody Review review,
-                                          Principal principal) {
-        Review savedReview = reviewService.createReview(review, principal);
-        return new ResponseEntity<>(savedReview, HttpStatus.CREATED);
+    @ApiOperation("리뷰 작성")
+    @PostMapping("/create/{mentee_id}/{lecture_id}")
+    public ResponseEntity<?> createReview(@RequestBody ReviewDto reviewDto,
+                                          @PathVariable("lecture_id") Long lectureId, @PathVariable("mentee_id") Long menteeId) {
+        Pair<Review, Mentor> result = reviewService.createReview(reviewDto, lectureId, menteeId);
+        Review savedReview = result.getFirst();
+        Mentor updatedMentor = result.getSecond();
+
+        return new ResponseEntity<>(new CreateReviewResponse(savedReview, updatedMentor), HttpStatus.CREATED);
     }
 
-    @ApiOperation("강의 리뷰확인")
-    @GetMapping("/lectures/{lecture_id}/reviews")
-    public ResponseEntity<?> getReviewsForLecture(@PathVariable("lecture_id") Long lectureId) {
-        List<Review> reviews = reviewService.getReviewsForLecture(lectureId);
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    @ApiOperation("리뷰삭제")
+    @DeleteMapping("/delete/{review_Id}")
+    public ResponseEntity<?> deleteReview(@PathVariable("review_Id") Long reviewId) {
+        Review review = reviewService.deleteReviews(reviewId);
+        return ResponseEntity.ok(review);
     }
 
     @ApiOperation("멘토 리뷰확인")
@@ -42,5 +50,14 @@ public class ReviewController {
         List<Review> reviews = reviewService.getReviewsForMentor(mentorId);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
+
+    // 댓글 작성 기능
+    @PostMapping("/reply/{review_Id}/{mentor_Id}")
+    public ResponseEntity<Reply> addReply(String content, @PathVariable("review_Id") Long mentorId, @PathVariable("mentor_Id") Long reviewId) {
+        Reply replyEntity = reviewService.addReply(reviewId, mentorId, content);
+        return new ResponseEntity<>(replyEntity,HttpStatus.OK);
+    }
+
+
 }
 

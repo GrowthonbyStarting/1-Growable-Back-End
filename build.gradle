@@ -19,6 +19,9 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
@@ -48,6 +51,10 @@ dependencies {
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     implementation 'javax.servlet:jstl:1.2'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+//    implementation 'com.github.JaehunYun:Iamport-SDK-java:1.2.1'
+//    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
+//    implementation 'com.google.guava:guava:31.0.1-jre'
+//    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
 
 

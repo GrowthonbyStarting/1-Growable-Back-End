@@ -8,7 +8,7 @@ public interface LectureService {
 
     Lecture createLecture(Long mentorId, LectureDto lectureDto);
 
-    void enrollInLecture(Long menteeId, Long lectureId);
+    Enrollment enrollInLecture(Long menteeId, Long lectureId);
 
     Enrollment cancelLectureEnrollment(Long menteeId, Long lectureId);
 }

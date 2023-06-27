@@ -13,6 +13,6 @@ public class ReviewDto {
     private Long lectureId;
     private Long menteeId;
     private String content;
-    private Boolean like;
+    private double starScore;
     private Long mentorId;
 }

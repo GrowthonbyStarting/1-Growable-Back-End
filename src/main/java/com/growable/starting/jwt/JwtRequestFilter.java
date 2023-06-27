@@ -39,7 +39,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // header 가 정상적인 형식인지 확인
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
-            System.out.println("저리가");
+            System.out.println("JwtHeader 불량");
             return;
         }
 

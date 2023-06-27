@@ -27,6 +27,7 @@ public class Mentee {
     @Column
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private Identity identity;
 
@@ -52,5 +53,8 @@ public class Mentee {
 
     @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments;
+
+    @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
 
 }

@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+//06.26 카카오 로그인 진입 성공 후 메소드 분리 예정
 @RestController
 @RequestMapping("/api")
 public class AuthController {

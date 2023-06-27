@@ -24,6 +24,7 @@ public class Mentor {
     @Column
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private Identity identity;
 
@@ -42,6 +43,9 @@ public class Mentor {
 
     @Column
     private String subcategory;
+
+    @Column
+    private double starScore;
 
     @ElementCollection
     @CollectionTable(name = "mentor_keywords", joinColumns = @JoinColumn(name = "mentor_id"))
@@ -64,6 +68,12 @@ public class Mentor {
 
     @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments;
+
+    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replies;
 
 
 }

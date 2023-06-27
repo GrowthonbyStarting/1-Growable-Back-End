@@ -1,14 +1,19 @@
 package com.growable.starting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "reviews")
+@Table(name = "review")
 public class Review {
 
     @Id
@@ -16,31 +21,26 @@ public class Review {
     @Column
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "lecture_id", nullable = false)
-    private Lecture lecture;
-
-    @ManyToOne
-    @JoinColumn(name = "mentee_id", nullable = false)
-    private Mentee mentee;
-
-    @Column(nullable = false)
+    @Lob
     private String content;
 
-    @Column(nullable = false)
-    private Boolean like = false;
+    @ColumnDefault("0.0")
+    private double starScore;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id", nullable = true)
+    private Lecture lecture;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mentee_id", nullable = true)
+    private Mentee mentee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
     private Mentor mentor;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replies;
 
-
-    public Review(Lecture lecture, Mentee mentee, String content) {
-        this.lecture = lecture;
-        this.mentee = mentee;
-        this.content = content;
-        this.like = false;
-    }
 
 }

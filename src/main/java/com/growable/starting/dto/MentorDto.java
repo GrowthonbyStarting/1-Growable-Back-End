@@ -30,5 +30,6 @@ public class MentorDto implements Serializable {
     private User user;
     private List<Company> company;
     private List<LectureExperience> lectureExperiences;
+    private int like;
 
 }

@@ -115,6 +115,7 @@ public class MentorServiceImpl implements MentorService{
     }
 
     @Transactional
+    @Override
     public List<Mentee> getMenteesForLecture(Long lectureId, Long mentorId) {
         List<Enrollment> enrollments = enrollmentRepository.findByLectureIdAndMentorId(lectureId, mentorId);
         return enrollments.stream().map(Enrollment::getMentee).collect(Collectors.toList());

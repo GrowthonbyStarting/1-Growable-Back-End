@@ -16,15 +16,23 @@ public class Enrollment {
     @Column
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_id")
     private Lecture lecture;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentee_id")
     private Mentee mentee;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
     private Mentor mentor;
+
+
+    public Enrollment(Mentee mentee, Lecture lecture, Mentor mentor) {
+        this.mentee = mentee;
+        this.lecture = lecture;
+        this.mentor = mentor;
+    }
+
 }

@@ -25,7 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    public static final String FRONT_URL = "http://ec2-13-209-18-185.ap-northeast-2.compute.amazonaws.com:3000";
+    public static final String FRONT_URL = "http://3.38.244.197:3000";
     private final CorsFilter corsFilter;
 
     public SecurityConfig(CorsFilter corsFilter) {
@@ -49,11 +49,11 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .addFilter(corsFilter) // @CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
-                .oauth2Login().defaultSuccessUrl("/main");
+                .oauth2Login();
         http
                 .authorizeRequests()
-                .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**", FRONT_URL + "/auth/**",FRONT_URL + "/oauth/**", FRONT_URL + "/main/**"
-                ,"/api/**")
+                .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/v2/api-docs/**", "/webjars/**","/api/**", FRONT_URL + "/api/**")
+//                .antMatchers("/**",FRONT_URL+"/**")
                 .permitAll()
                 .anyRequest().authenticated()
 
