@@ -46,7 +46,7 @@ public class MentorController {
     @PostMapping("/mentor/profile-image")
     public ResponseEntity<Mentor> uploadMentorProfileImage(
             @RequestParam("image") MultipartFile image,
-            @RequestParam("mentorId") String mentorId) throws StorageException {
+            @RequestParam("mentorId") Long mentorId) throws StorageException {
         Mentor updatedMentor = mentorService.storeMentorProfileImage(mentorId, image);
         return ResponseEntity.ok(updatedMentor);
     }

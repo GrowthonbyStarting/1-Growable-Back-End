@@ -1,6 +1,7 @@
 package com.growable.starting.service;
 
 import com.growable.starting.dto.MentorDto;
+import com.growable.starting.exception.MentorNotFoundException;
 import com.growable.starting.exception.StorageException;
 import com.growable.starting.model.*;
 import com.growable.starting.model.type.Identity;
@@ -19,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,7 +40,7 @@ public class MentorServiceImpl implements MentorService {
 
     @Override
     @Transactional
-    public Mentor storeMentorProfileImage(String mentorId, MultipartFile image) throws StorageException {
+    public Mentor storeMentorProfileImage(Long mentorId, MultipartFile image) throws StorageException {
         if (image.isEmpty()) {
             throw new StorageException("Failed to store empty file.");
         }
@@ -48,21 +50,18 @@ public class MentorServiceImpl implements MentorService {
             Path mentorProfileImageDir = Paths.get("mentorProfileImages");
             Files.createDirectories(mentorProfileImageDir);
 
-            // 개별 멘토의 프로필 이미지를 저장할 경로를 만듭니다.
-            Path mentorImageDir = mentorProfileImageDir.resolve(mentorId);
-            Files.createDirectories(mentorImageDir);
-
-            // 이미지 파일 이름 생성
-            String uniqueImageName = UUID.randomUUID() + "." + FilenameUtils.getExtension(image.getOriginalFilename());
-
-            // 이미지를 지정된 경로로 복사
-            Path destination = mentorImageDir.resolve(uniqueImageName);
+            String uniqueImageName = mentorId + "_" + UUID.randomUUID()+ "." + FilenameUtils.getExtension(image.getOriginalFilename());
+            Path destination = mentorProfileImageDir.resolve(uniqueImageName);
             Files.copy(image.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-            Mentor mentor = mentorRepository.findById(Long.valueOf(mentorId)).orElseThrow(() -> new IllegalStateException("Cannot find mentor with id " + mentorId));
-            mentor.setProfileImageUrl(destination.toString());
+            Optional<Mentor> optionalMentor = mentorRepository.findById(mentorId);
+            if(optionalMentor.isEmpty()){
+                throw new MentorNotFoundException("Cannot find mentor with id" + mentorId);
+            }
+            Mentor mentor = optionalMentor.get();
+            String imageUrl = "/mentorProfileImages/" + uniqueImageName;
+            mentor.setProfileImageUrl(imageUrl);
             mentorRepository.save(mentor);
-
             return mentor;
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);

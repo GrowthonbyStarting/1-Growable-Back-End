@@ -53,11 +53,9 @@ public class ReviewController {
 
     // 댓글 작성 기능
     @PostMapping("/reply/{review_Id}/{mentor_Id}")
-    public ResponseEntity<Reply> addReply(String content, @PathVariable("review_Id") Long mentorId, @PathVariable("mentor_Id") Long reviewId) {
+    public ResponseEntity<Reply> addReply(String content, @PathVariable("review_Id") Long reviewId, @PathVariable("mentor_Id") Long mentorId) {
         Reply replyEntity = reviewService.addReply(reviewId, mentorId, content);
         return ResponseEntity.ok(replyEntity);
     }
-
-
 }
 

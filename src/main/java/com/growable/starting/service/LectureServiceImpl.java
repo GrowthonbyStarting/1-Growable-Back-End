@@ -2,6 +2,7 @@ package com.growable.starting.service;
 
 import com.growable.starting.dto.LectureDto;
 import com.growable.starting.exception.InsufficientFundsException;
+import com.growable.starting.exception.MentorNotFoundException;
 import com.growable.starting.exception.NotFoundException;
 import com.growable.starting.model.Enrollment;
 import com.growable.starting.model.Lecture;
@@ -31,8 +32,6 @@ public class LectureServiceImpl implements LectureService {
     private final EnrollmentRepository enrollmentRepository;
     private final EmailService emailService;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-
     @Autowired
     public LectureServiceImpl(LectureRepository lectureRepository, MentorRepository mentorRepository, MenteeRepository menteeRepository, EnrollmentRepository enrollmentRepository, EmailService emailService) {
         this.lectureRepository = lectureRepository;
@@ -47,7 +46,7 @@ public class LectureServiceImpl implements LectureService {
     @Transactional
     public Lecture createLecture(Long mentorId, LectureDto lectureDto) {
         Mentor mentor = mentorRepository.findById(mentorId)
-                .orElseThrow(() -> new IllegalArgumentException("Mentor not found with ID: " + mentorId));
+                .orElseThrow(() -> new MentorNotFoundException("Mentor not found with ID: " + mentorId));
 
         Lecture lecture = new Lecture();
         lecture.setTitle(lectureDto.getTitle());
@@ -57,7 +56,7 @@ public class LectureServiceImpl implements LectureService {
         lecture.setFee(lectureDto.getFee());
         lecture.setLectureStartDate(lectureDto.getLectureStartDate());
         lecture.setLectureEndDate(lectureDto.getLectureEndDate());
-        lecture.setMentorName(lecture.getMentor().getName());
+        lecture.setMentorName(mentor.getName());
         lecture.setStatus(LectureStatus.NOT_STARTED);
         lecture.setMentor(mentor);
         lecture.setTeamUrl(lectureDto.getTeamUrl());
@@ -108,12 +107,9 @@ public class LectureServiceImpl implements LectureService {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow(() -> new NotFoundException("Lecture not found"));
         Mentor mentor = lecture.getMentor();
         Enrollment enrollment = new Enrollment(mentee, lecture, mentor);
-        enrollment.setMentee(mentee);
-        enrollment.setLecture(lecture);
-        enrollment.setMentor(mentor);
         enrollmentRepository.save(enrollment);
         if (mentee.getPoint() < lecture.getFee()) {
-            throw new InsufficientFundsException("Insufficient funds for enrolling in lecture");
+            throw new InsufficientFundsException("Not enough points of mentee '" + mentee.getName() + "' to enroll in lecture '" + lecture.getTitle() + "'");
         } else {
             mentee.setPoint(mentee.getPoint() - lecture.getFee());
             menteeRepository.save(mentee);

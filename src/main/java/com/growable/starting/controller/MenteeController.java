@@ -29,22 +29,17 @@ public class MenteeController {
         this.lectureService = lectureService;
     }
 
-    @ApiOperation("챌린지 신청")
     @PostMapping("/{lectureId}/enroll/{menteeId}")
-    public ResponseEntity<?> enrollInLecture(@PathVariable Long lectureId, @PathVariable Long menteeId) {
-        try {
-            Enrollment enrollment = lectureService.enrollInLecture(menteeId, lectureId);
-            int updatedPoints = enrollment.getMentee().getPoint();
+    public ResponseEntity<EnrollmentResponse> enrollInLecture(@PathVariable Long lectureId, @PathVariable Long menteeId) {
+        Enrollment enrollment = lectureService.enrollInLecture(menteeId, lectureId);
+        int updatedPoints = enrollment.getMentee().getPoint();
 
-            // 응답 객체 생성과 함께 정보 채우기
-            EnrollmentResponse response = new EnrollmentResponse();
-            response.setUpdatedPoints(updatedPoints);
-            response.setEnrollment(enrollment);
+        // 응답 객체 생성과 함께 정보 채우기
+        EnrollmentResponse response = new EnrollmentResponse();
+        response.setUpdatedPoints(updatedPoints);
+        response.setEnrollment(enrollment);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (NotFoundException | InsufficientFundsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @ApiOperation("챌친지 신청 취소")
@@ -75,7 +70,7 @@ public class MenteeController {
     @PostMapping("/profile-image")
     public ResponseEntity<?> uploadMenteeProfileImage(
             @RequestParam("image") MultipartFile image,
-            @RequestParam("menteeId") String menteeId) throws StorageException {
+            @RequestParam("menteeId") Long menteeId) throws StorageException {
         Mentee mentee = menteeService.storeMenteeProfileImage(menteeId, image);
         return ResponseEntity.ok(mentee);
     }

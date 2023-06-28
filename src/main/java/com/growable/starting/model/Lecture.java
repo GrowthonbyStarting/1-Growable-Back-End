@@ -44,7 +44,7 @@ public class Lecture {
     @Enumerated(EnumType.STRING)
     private LectureStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mentor_id")
     private Mentor mentor;
 

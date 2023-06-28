@@ -1,6 +1,7 @@
 package com.growable.starting.service;
 
 import com.growable.starting.dto.MenteeDto;
+import com.growable.starting.exception.MenteeNotFoundException;
 import com.growable.starting.exception.StorageException;
 import com.growable.starting.model.Mentee;
 import com.growable.starting.model.User;
@@ -18,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -58,7 +60,7 @@ public class MenteeServiceImpl implements MenteeService {
 
     @Override
     @Transactional
-    public Mentee storeMenteeProfileImage(String menteeId, MultipartFile image) throws StorageException {
+    public Mentee storeMenteeProfileImage(Long menteeId, MultipartFile image) throws StorageException {
         if (image.isEmpty()) {
             throw new StorageException("Failed to store empty file.");
         }
@@ -67,16 +69,17 @@ public class MenteeServiceImpl implements MenteeService {
             Path menteeProfileImageDir = Paths.get("menteeProfileImages");
             Files.createDirectories(menteeProfileImageDir);
 
-            Path menteeImageDir = menteeProfileImageDir.resolve(menteeId.toString());
-            Files.createDirectories(menteeImageDir);
-
-            String uniqueImageName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename());
-            Path destination = menteeImageDir.resolve(uniqueImageName);
+            String uniqueImageName = menteeId + "_" + UUID.randomUUID() + "." + FilenameUtils.getExtension(image.getOriginalFilename());
+            Path destination = menteeProfileImageDir.resolve(uniqueImageName);
             Files.copy(image.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-            Mentee mentee = menteeRepository.findById(Long.valueOf(menteeId)).orElseThrow(() -> new IllegalStateException("Cannot find mentor with id " + menteeId));
-            String imageUrl = "/menteeProfileImages/" + menteeId + "/" + uniqueImageName;
-            mentee.setProfileImageUrl(imageUrl);
+            Optional<Mentee> optionalMentee = menteeRepository.findById(menteeId);
+            if (optionalMentee.isEmpty()) {
+                throw new MenteeNotFoundException("Cannot find mentee with id " + menteeId);
+            }
+            Mentee mentee = optionalMentee.get();
+            String imageUrl = "/menteeProfileImages/" + uniqueImageName;
+            mentee.setImageUrl(imageUrl);
             menteeRepository.save(mentee);
 
             return mentee;
