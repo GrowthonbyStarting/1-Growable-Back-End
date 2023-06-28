@@ -55,7 +55,7 @@ public class MentorController {
     @PostMapping("/create/lectures/{mentorId}")
     public ResponseEntity<Lecture> createLecture(@PathVariable Long mentorId, @RequestBody LectureDto lectureDto) {
         Lecture lecture = lectureService.createLecture(mentorId, lectureDto);
-        return new ResponseEntity<>(lecture, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(lecture);
     }
 
     @ApiOperation("챌린지를 신청한 멘티 확인")

@@ -48,14 +48,14 @@ public class ReviewController {
     @GetMapping("/mentors/{mentor_id}/reviews")
     public ResponseEntity<?> getReviewsForMentor(@PathVariable("mentor_id") Long mentorId) {
         List<Review> reviews = reviewService.getReviewsForMentor(mentorId);
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
+        return ResponseEntity.ok(reviews);
     }
 
     // 댓글 작성 기능
     @PostMapping("/reply/{review_Id}/{mentor_Id}")
     public ResponseEntity<Reply> addReply(String content, @PathVariable("review_Id") Long mentorId, @PathVariable("mentor_Id") Long reviewId) {
         Reply replyEntity = reviewService.addReply(reviewId, mentorId, content);
-        return new ResponseEntity<>(replyEntity, HttpStatus.OK);
+        return ResponseEntity.ok(replyEntity);
     }
 
 
