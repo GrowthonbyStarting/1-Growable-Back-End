@@ -137,5 +137,10 @@ public class LectureServiceImpl implements LectureService {
         enrollmentRepository.delete(enrollment);
         return enrollment;
     }
+
+    @Override
+    public List<Lecture> findAllLectures() {
+        return lectureRepository.findAll();
+    }
 }
 

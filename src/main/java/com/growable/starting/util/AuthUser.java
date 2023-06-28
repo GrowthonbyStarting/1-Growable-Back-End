@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 
 public class AuthUser {
+
     public static User getAuthenticatedUser(String accessToken, UserRepository userRepository) {
         KakaoProfile kakaoProfile = getKakaoProfile(accessToken);
         return saveKakaoUserInfo(kakaoProfile, userRepository);
@@ -30,14 +31,9 @@ public class AuthUser {
     }
 
     private static User saveKakaoUserInfo(KakaoProfile kakaoProfile, UserRepository userRepository) {
+
         KakaoProfile.KakaoAccount kakaoAccount = kakaoProfile.getKakao_account();
         Long kakaoId = kakaoProfile.getId();
-
-        // 이미 가입한 사용자가 있는지 확인하고 있다면 해당 사용자 정보를 반환합니다.
-        Optional<User> existingUserOptional = userRepository.findByKakaoId(kakaoId);
-        if (existingUserOptional.isPresent()) {
-            return existingUserOptional.get();
-        }
 
         User newUser = new User();
         newUser.setKakaoId(kakaoId);
