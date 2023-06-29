@@ -30,4 +30,8 @@ public class Company {
     @Column
     private String endDate; // 허용되는 null 값입니다.
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mentor_id")
+    private Mentor mentor;
+
 }

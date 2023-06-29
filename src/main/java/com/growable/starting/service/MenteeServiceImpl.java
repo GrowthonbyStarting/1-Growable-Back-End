@@ -37,25 +37,30 @@ public class MenteeServiceImpl implements MenteeService {
 
     @Override
     @Transactional
-    public Mentee becomeMentee(Long userId, MenteeDto menteeDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. id: " + userId));
+    public Mentee becomeMentee(Long userCode, MenteeDto menteeDto) {
+        User user = userRepository.findById(userCode)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. id: " + userCode));
 
         if (user.getMentee() != null) {
             throw new IllegalStateException("이미 멘티로 등록된 사용자입니다.");
         }
 
         Mentee mentee = new Mentee();
-        mentee.setName(user.getKakaoNickname());
-        mentee.setEmail(user.getKakaoEmail());
+        mentee.setName(menteeDto.getName());
+        mentee.setEmail(menteeDto.getEmail());
         mentee.setIdentity(Identity.MENTEE);
         mentee.setStartingUrl(menteeDto.getStartingUrl());
         mentee.setImageUrl(user.getKakaoProfileImg());
         mentee.setUser(user);
-
+        mentee.setPoint(menteeDto.getPoint());
+        mentee.setPhoneNumber(menteeDto.getPhoneNumber());
+        mentee.setBankName(mentee.getBankName());
+        mentee.setAccount(mentee.getAccount());
+        mentee.setPoint(0);
         user.setMentee(mentee);
+        menteeRepository.save(mentee);
         userRepository.save(user);
-        return mentee;
+        return menteeRepository.save(mentee);
     }
 
     @Override

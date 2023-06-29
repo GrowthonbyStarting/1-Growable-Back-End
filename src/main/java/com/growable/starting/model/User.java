@@ -1,6 +1,7 @@
 package com.growable.starting.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.growable.starting.model.type.Identity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Table(name = "user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_code")
@@ -31,8 +33,9 @@ public class User {
     @Column(name = "kakao_email")
     private String kakaoEmail;
 
-    @Column(name = "user_role")
-    private String userRole;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Identity identity;
 
     @Column(name = "create_time")
     @CreationTimestamp
@@ -48,12 +51,12 @@ public class User {
 
     @Builder
     public User(Long kakaoId, String kakaoProfileImg, String kakaoNickname,
-                String kakaoEmail, String userRole) {
+                String kakaoEmail, Identity identity) {
 
         this.kakaoId = kakaoId;
         this.kakaoProfileImg = kakaoProfileImg;
         this.kakaoNickname = kakaoNickname;
         this.kakaoEmail = kakaoEmail;
-        this.userRole = userRole;
+        this.identity = identity;
     }
 }

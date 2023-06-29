@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum Identity {
 
+    USER("ROLE_USER"),
     MENTEE("ROLE_MENTEE"),
     MENTOR("ROLE_MENTOR");
 

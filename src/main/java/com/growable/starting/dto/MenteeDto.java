@@ -1,16 +1,16 @@
 package com.growable.starting.dto;
 
 import com.growable.starting.model.type.Identity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
 @Builder
-public class MenteeDto implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class MenteeDto{
 
     private Long menteeId;
     private String imageUrl;
@@ -21,4 +21,7 @@ public class MenteeDto implements Serializable {
     private String phoneNumber;
     private String StartingUrl;
     private String profileImageUrl;
+    private String bankName;
+    private String account;
+
 }

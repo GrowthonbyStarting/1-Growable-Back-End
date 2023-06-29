@@ -1,10 +1,14 @@
 package com.growable.starting.model;
 
 import com.growable.starting.model.type.Identity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -57,4 +61,24 @@ public class Mentee {
     @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
+    @Column
+    private String bankName;
+
+    @Column
+    private String account;
+
+    @Builder
+    public Mentee(String  imageUrl, String name, String email,
+                Identity identity,int point,String phoneNumber, String StartingUrl, User user,String bankName, String account) {
+        this.imageUrl = imageUrl;
+        this.name = name;
+        this.email = email;
+        this.identity = identity;
+        this.Point = point;
+        this.phoneNumber = phoneNumber;
+        this.StartingUrl = StartingUrl;
+        this.user = user;
+        this.bankName = bankName;
+        this.account = account;
+    }
 }

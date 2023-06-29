@@ -54,11 +54,11 @@ public class MenteeController {
     }
 
     @ApiOperation("유저에서 멘티로 전환")
-    @PostMapping("/{userId}/become-mentee")
-    public ResponseEntity<?> becomeMentee(@PathVariable Long userId, @RequestBody MenteeDto menteeDto) {
+    @PostMapping("/{userCode}/become-mentee")
+    public ResponseEntity<?> becomeMentee(@PathVariable("userCode") Long userCode, @RequestBody MenteeDto menteeDto) {
         try {
-            Mentee mentee = menteeService.becomeMentee(userId, menteeDto);
-            return ResponseEntity.ok(mentee);
+            Mentee mentee = menteeService.becomeMentee(userCode, menteeDto);
+            return ResponseEntity.ok().body(mentee);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalStateException e) {

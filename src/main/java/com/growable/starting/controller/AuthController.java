@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+//@CrossOrigin
 @RequestMapping("/api")
 public class AuthController {
 

@@ -2,6 +2,7 @@ package com.growable.starting.util;
 
 import com.growable.starting.dto.auth.KakaoProfile;
 import com.growable.starting.model.User;
+import com.growable.starting.model.type.Identity;
 import com.growable.starting.repository.UserRepository;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -35,12 +36,20 @@ public class AuthUser {
         KakaoProfile.KakaoAccount kakaoAccount = kakaoProfile.getKakao_account();
         Long kakaoId = kakaoProfile.getId();
 
+        Optional<User> optionalUser = userRepository.findByKakaoId(kakaoId); //이미 가입된 사용자인지 확인
+
+        //이미 가입된 사용자라면 리턴
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        }
+
+
         User newUser = new User();
         newUser.setKakaoId(kakaoId);
         newUser.setKakaoProfileImg(kakaoAccount.getProfile().getThumbnail_image_url());
         newUser.setKakaoNickname(kakaoAccount.getProfile().getNickname());
         newUser.setKakaoEmail(kakaoAccount.getEmail());
-        newUser.setUserRole("USER");
+        newUser.setIdentity(Identity.USER);
 
         return userRepository.save(newUser);
     }

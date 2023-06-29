@@ -76,13 +76,16 @@ public class MentorServiceImpl implements MentorService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. id: " + mentorDto.getUser().getUserCode()));
 
         Mentor mentor = new Mentor();
-        mentor.setName(user.getKakaoNickname());
-        mentor.setEmail(user.getKakaoEmail());
+        mentor.setName(mentorDto.getName());
+        mentor.setEmail(mentorDto.getEmail());
         mentor.setIdentity(Identity.MENTOR);
         mentor.setChatUrl(mentorDto.getChatUrl());
         mentor.setCategory(mentorDto.getCategory());
         mentor.setSubcategory(mentorDto.getSubcategory());
         mentor.setKeywords(mentorDto.getKeywords());
+        mentor.setBankName(mentorDto.getBankName());
+        mentor.setAccount(mentorDto.getAccount());
+        mentor.setPoint(0);
 
         List<Company> companyInfos = mentorDto.getCompany().stream()
                 .map(infoDto -> {
@@ -111,6 +114,7 @@ public class MentorServiceImpl implements MentorService {
 
         user.setMentor(mentor);
         userRepository.save(user);
+        mentorRepository.save(mentor);
         return mentor;
     }
 

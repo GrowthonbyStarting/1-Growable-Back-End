@@ -1,7 +1,9 @@
 package com.growable.starting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.growable.starting.model.type.Identity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "mentorId")
 @Entity
 @Data
 @NoArgsConstructor
@@ -45,17 +48,22 @@ public class Mentor {
     @Column
     private double starScore;
 
-    @ElementCollection
+    @Column
+    private String bankName;
+
+    @Column
+    private String account;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "mentor_keywords", joinColumns = @JoinColumn(name = "mentor_id"))
     @Column(name = "keyword")
     private List<String> keywords;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "mentor_id")
+
+    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Company> companyInfos;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "mentor_id")
+    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LectureExperience> lectureExperiences;
 
     @Column

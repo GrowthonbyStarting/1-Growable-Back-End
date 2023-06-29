@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface MenteeService {
 
 
-    Mentee becomeMentee(Long userId, MenteeDto menteeDto);
+    Mentee becomeMentee(Long userCode, MenteeDto menteeDto);
 
 
     @Transactional

@@ -2,6 +2,8 @@ package com.growable.starting.service;
 
 import com.growable.starting.dto.auth.AuthRequest;
 import com.growable.starting.dto.auth.AuthResponse;
+import com.growable.starting.repository.MenteeRepository;
+import com.growable.starting.repository.MentorRepository;
 import com.growable.starting.repository.UserRepository;
 import com.growable.starting.util.AuthHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,14 @@ public class AuthServiceImpl implements AuthService{
     String client_id;
 
     private final UserRepository userRepository;
+    private final MenteeRepository menteeRepository;
+    private final MentorRepository mentorRepository;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository) {
+    public AuthServiceImpl(UserRepository userRepository, MenteeRepository menteeRepository, MentorRepository mentorRepository) {
         this.userRepository = userRepository;
+        this.menteeRepository = menteeRepository;
+        this.mentorRepository = mentorRepository;
     }
 
     @Override
@@ -34,6 +40,6 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest) {
-        return AuthHelper.handleRedirect(authRequest, userRepository, client_id);
+        return AuthHelper.handleRedirect(mentorRepository,menteeRepository,authRequest, userRepository, client_id);
     }
 }
