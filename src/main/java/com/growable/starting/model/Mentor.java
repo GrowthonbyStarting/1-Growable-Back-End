@@ -1,5 +1,7 @@
 package com.growable.starting.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.growable.starting.model.type.Identity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,10 +36,6 @@ public class Mentor {
     @Column
     private String chatUrl;
 
-    @OneToOne
-    @JoinColumn(name = "user_code")
-    private User user;
-
     @Column
     private String category;
 
@@ -63,7 +61,13 @@ public class Mentor {
     @Column
     private String profileImageUrl;
 
+    @OneToOne
+    @JoinColumn(name = "user_code")
+    @JsonBackReference
+    private User user;
+
     @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Lecture> lectures;
 
     @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)

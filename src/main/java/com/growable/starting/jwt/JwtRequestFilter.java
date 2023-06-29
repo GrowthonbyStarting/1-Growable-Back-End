@@ -29,16 +29,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String servletPath = request.getServletPath();
+
+        log.info("Servlet Path: {}", servletPath);
+
         if (isSwaggerPath(servletPath)) {
             filterChain.doFilter(request, response);
             return;
         }
+
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
+        // 로그 추가
+        log.info("JwtHeader: {}", jwtHeader);
         System.out.println("JwtRequestFilter 진입");
 
         // header 가 정상적인 형식인지 확인
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
+            log.warn("Invalid JwtHeader");
             System.out.println("JwtHeader 불량");
             return;
         }
