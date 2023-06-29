@@ -1,7 +1,6 @@
 package com.growable.starting.controller;
 
 import com.growable.starting.dto.MenteeDto;
-import com.growable.starting.exception.InsufficientFundsException;
 import com.growable.starting.exception.NotFoundException;
 import com.growable.starting.exception.StorageException;
 import com.growable.starting.model.Enrollment;

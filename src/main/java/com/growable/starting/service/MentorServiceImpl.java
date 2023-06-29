@@ -50,12 +50,12 @@ public class MentorServiceImpl implements MentorService {
             Path mentorProfileImageDir = Paths.get("mentorProfileImages");
             Files.createDirectories(mentorProfileImageDir);
 
-            String uniqueImageName = mentorId + "_" + UUID.randomUUID()+ "." + FilenameUtils.getExtension(image.getOriginalFilename());
+            String uniqueImageName = mentorId + "_" + UUID.randomUUID() + "." + FilenameUtils.getExtension(image.getOriginalFilename());
             Path destination = mentorProfileImageDir.resolve(uniqueImageName);
             Files.copy(image.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
             Optional<Mentor> optionalMentor = mentorRepository.findById(mentorId);
-            if(optionalMentor.isEmpty()){
+            if (optionalMentor.isEmpty()) {
                 throw new MentorNotFoundException("Cannot find mentor with id" + mentorId);
             }
             Mentor mentor = optionalMentor.get();

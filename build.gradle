@@ -61,7 +61,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task myJar(type: Jar){
+task myJar(type: Jar) {
     archiveFileName.set('startingProject.jar')
     from sourceSets.main.output
 }

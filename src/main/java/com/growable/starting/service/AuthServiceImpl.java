@@ -15,14 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class AuthServiceImpl implements AuthService{
-
-    @Value("${kakao.clientId}")
-    String client_id;
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final MenteeRepository menteeRepository;
     private final MentorRepository mentorRepository;
+    @Value("${kakao.clientId}")
+    String client_id;
 
     @Autowired
     public AuthServiceImpl(UserRepository userRepository, MenteeRepository menteeRepository, MentorRepository mentorRepository) {
@@ -40,6 +39,6 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest) {
-        return AuthHelper.handleRedirect(mentorRepository,menteeRepository,authRequest, userRepository, client_id);
+        return AuthHelper.handleRedirect(mentorRepository, menteeRepository, authRequest, userRepository, client_id);
     }
 }
