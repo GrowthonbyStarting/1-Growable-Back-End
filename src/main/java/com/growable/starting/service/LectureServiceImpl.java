@@ -65,17 +65,18 @@ public class LectureServiceImpl implements LectureService {
         return lectureRepository.save(lecture);
     }
 
-    @Scheduled(cron = "*/30 * * * * *") //30초마다 실행
-    public void updateLectureStatus() {
-        // 모든 강의를 가져옵니다.
-        List<Lecture> lectures = lectureRepository.findAll();
+//  30초마다 강의 모집 정보 update
+@Scheduled(cron = "*/30 * * * * *")
+public void updateLectureStatus() {
+    // 모든 강의를 가져옵니다.
+    List<Lecture> lectures = lectureRepository.findAll();
 
-        // 현재 시간 가져오기
-        LocalDateTime currentTime = LocalDateTime.now();
+    // 현재 시간 가져오기
+    LocalDateTime currentTime = LocalDateTime.now();
 
-        // 각 강의에 대해 상태를 확인하고 업데이트합니다.
-        for (Lecture lecture : lectures) {
-            // 현재 강의를 신청한 학생 수를 가져옵니다.
+    // 각 강의에 대해 상태를 확인하고 업데이트합니다.
+    for (Lecture lecture : lectures) {
+        // 현재 강의를 신청한 학생 수를 가져옵니다.
             int enrolledStudents = lectureRepository.countEnrolledStudentsForCurrentLecture(lecture.getId());
 
             // 모집일이 이미 종료된 경우
@@ -101,6 +102,7 @@ public class LectureServiceImpl implements LectureService {
         }
     }
 
+    //  mentee 강의 신청 -> 결제 -> 완료 후 이메일로 신청 내역 전달
     @Override
     @Transactional
     public Enrollment enrollInLecture(Long menteeId, Long lectureId) {
