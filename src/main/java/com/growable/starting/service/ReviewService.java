@@ -9,15 +9,10 @@ import java.util.List;
 
 public interface ReviewService {
 
-    Review createReview(ReviewDto reviewDto);
-
-    List<Review> getReviewsForLecture(Long lectureId);
-
     List<Review> getReviewsForMentor(Long mentorId);
 
     boolean isLectureEndDateAfterNow(Lecture lecture);
 
-    Mentee getCurrentMentee(Principal principal);
 
     Review deleteReviews(Long reviewId);
 

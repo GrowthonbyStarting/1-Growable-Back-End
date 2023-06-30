@@ -8,6 +8,5 @@ import java.util.Optional;
 
 // 기본적인 CRUD 함수를 가지고 있음
 // JpaRepository를 상속했기 때문에 @Repository 어노테이션 불필요
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByKakaoId(Long kakaoId);
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
 }
