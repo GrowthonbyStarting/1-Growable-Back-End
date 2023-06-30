@@ -58,18 +58,6 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
-    @Transactional
-    @Override
-    public Review createReview(ReviewDto reviewDto) {
-        return null;
-    }
-
-    // 강좌별 리뷰를 가져오는 메소드
-    @Transactional
-    @Override
-    public List<Review> getReviewsForLecture(Long lectureId) {
-        return reviewRepository.findAllByLectureId(lectureId);
-    }
 
     // 멘토별 리뷰를 가져오는 메소드
     @Transactional
@@ -83,29 +71,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public boolean isLectureEndDateAfterNow(Lecture lecture) {
         return lecture.getLectureEndDate().isAfter(LocalDate.now());
-    }
-
-    // 현재 접속한 멘티 정보를 가져오는 메소드
-    @Transactional
-    @Override
-    public Mentee getCurrentMentee(Principal principal) {
-        if (principal instanceof DefaultOAuth2User userDetails) {
-
-            // 이메일 정보를 가져옴
-            String email = (String) userDetails.getAttributes().get("email");
-            if (email != null) {
-                Optional<Mentee> optionalMentee = menteeRepository.findByEmail(email);
-                if (optionalMentee.isPresent()) {
-                    return optionalMentee.get();
-                } else {
-                    throw new RuntimeException("Mentee not found.");
-                }
-            } else {
-                throw new RuntimeException("Email not found in OAuth2 user attributes.");
-            }
-        } else {
-            throw new RuntimeException("No valid principal found.");
-        }
     }
 
     @Transactional
